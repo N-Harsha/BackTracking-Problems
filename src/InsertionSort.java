@@ -34,21 +34,21 @@ public class InsertionSort extends JPanel {
         super.paintComponent(g);
 
         Graphics2D g2d = (Graphics2D)g;
-        g2d.setColor(Color.CYAN);
+        g2d.setColor(new Color(229, 19, 19, 255));
         Rectangle2D.Float bar;
         for(int i = 0; i < SIZE; i++) {
             bar = new Rectangle2D.Float(i * BAR_WIDTH, 0, BAR_WIDTH, bar_height[i]);
             g2d.fill(bar);
         }
 
-        g2d.setColor(Color.RED);
+        g2d.setColor(new Color(214, 95, 239));
         bar = new Rectangle2D.Float(current_index * BAR_WIDTH,
                 0,
                 BAR_WIDTH,
                 bar_height[current_index]);
         g2d.fill(bar);
 
-        g2d.setColor(Color.GREEN);
+        g2d.setColor(new Color(220, 201, 26));
         bar = new Rectangle2D.Float(traversing_index * BAR_WIDTH,
                 0,
                 BAR_WIDTH,

@@ -1,5 +1,4 @@
-import java.io.BufferedWriter;
-import java.io.FileWriter;
+
 import java.io.IOException;
 
 public class KnightsV1{
@@ -15,29 +14,13 @@ public class KnightsV1{
     KnightsV1()throws IOException{
         flag=false;
         a= new int[8][8];
-        new BufferedWriter(new FileWriter("entry.txt"));
+//        new BufferedWriter(new FileWriter("entry.txt"));
         cnt=0;
         cnt1=0;
         disp();
         writer(0,0);
         disp();
 //        bw.close();
-    }
-    public void disp1() throws IOException {
-
-        BufferedWriter bw = new BufferedWriter(new FileWriter("entry.txt",true));
-        if(cnt1==0)
-            bw.write("");
-        cnt1++;
-        bw.append(String.valueOf(cnt1)).append(" )\n");
-        for(int i=0;i<8;i++)
-        {
-            for(int j=0;j<8;j++)
-                bw.append(String.valueOf(a[i][j])).append("\t");
-            bw.append("\n");
-        }
-        bw.append("\n");
-        bw.close();
     }
     public void disp(){
 //        System.out.println();
