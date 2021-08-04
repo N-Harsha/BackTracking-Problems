@@ -1,25 +1,29 @@
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class combo extends JPanel{
+public class combo extends JPanel implements ActionListener {
     int[][] a;
     int n=8;
     JSlider js;
+    JButton res;
     int speed = 100;
     List<Integer> tpos;
     SwingWorker<Void,Void> Linker;
-    List<List<Integer>> pos = new ArrayList<List<Integer>>();
+    List<List<Integer>> pos = new ArrayList<>();
     int[] xMove = { 2, 1, -1, -2, -2, -1, 1, 2 };
     int[] yMove = { 1, 2, 2, 1, -1, -2, -2, -1 };
 //    int cnt=0;
-    combo(int i,int j,JSlider js){
+    combo(int i,int j,JSlider js,JButton b){
+        this.res = b;
         this.js = js;
         a = new int[8][8];
         a[i][j]=1;
-        tpos =new ArrayList<Integer>();
+        tpos =new ArrayList<>();
         tpos.add(j);
         tpos.add(i);
         pos.add(tpos);
@@ -31,10 +35,23 @@ public class combo extends JPanel{
             @Override
             protected Void doInBackground() throws Exception {
                 solver(i,j,2);
+                Thread.sleep(5000);
+                pos=new ArrayList<>();
                 return null;
             }
         };
         Linker.execute();
+    }
+
+    public void actionPerformed(ActionEvent e){
+//        if(e.getSource()==res)
+//        {
+////            pos = new ArrayList<>();
+//            System.out.println("hello");
+////            repaint();
+////            Linker.execute();
+//        }
+//        System.out.println(e.getSource());
     }
 
     @Override
@@ -58,13 +75,11 @@ public class combo extends JPanel{
             }
             cnt++;
             g1.setColor(Color.cyan);
-            try {
-                g1.drawString(String.valueOf(cnt), getWidth() * (pos.get(i).get(0) + 1) / 8 - getWidth() / 16, getHeight() * (pos.get(i).get(1) + 1) / 8 - getHeight() / 16);
-            }
-            catch (Exception E)
-            {
-
-            }
+                try {
+                    g1.drawString(String.valueOf(cnt), getWidth() * (pos.get(i).get(0) + 1) / 8 - getWidth() / 16, getHeight() * (pos.get(i).get(1) + 1) / 8 - getHeight() / 16);
+                }
+                catch (Exception e)
+                {}
             if(i>0) {
                 g1.setColor(new Color(255, 52, 191));
                 try {
@@ -133,7 +148,6 @@ public class combo extends JPanel{
                 JFrame J = new JFrame("Knight's Tour");
                 J.getContentPane().setLayout(new BoxLayout(J.getContentPane(),BoxLayout.Y_AXIS));
 //                J.getContentPane().setBorder(new EmptyBorder(new Insets(20,20,20,20)));
-
                 J.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                 J.setSize(600, 600);
                 JPanel np = new JPanel();
@@ -147,13 +161,17 @@ public class combo extends JPanel{
                 np.add(spd);
                 np.add(js);
                 np.setBorder(new EmptyBorder(new Insets(10,10,10,10)));
-                J.add(new combo(0,0,js));
+                JButton b = new JButton("Reset");
+                J.add(new combo(0,0,js,b));
+                np.add(b);
                 J.add(np);
+
                 J.setVisible(true);
             }
         });
 //        new combo(0,0);
     }
+
 
 
 }

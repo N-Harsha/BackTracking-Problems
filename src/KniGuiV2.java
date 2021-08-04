@@ -1,18 +1,25 @@
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class KniGuiV2 extends JPanel{
+public class KniGuiV2 extends JPanel implements ActionListener{
     KnightsV1 kt;
-
+    JSlider js;
+    JButton res;
     List<List<Integer>> pos = new ArrayList<>();
 
     SwingWorker<Void,Void> linker;
-    KniGuiV2(){
+    KniGuiV2(JSlider js,JButton res) throws IOException {
+        this.js=js;
+        this.res=res;
 
         this.setBackground(Color.black);
-        try {
+
             kt = new KnightsV1();
             linker=new SwingWorker<>(){
 
@@ -34,7 +41,12 @@ public class KniGuiV2 extends JPanel{
                                     flag=false;
 //                                    System.out.println(pos);
                                     repaint();
-                                    Thread.sleep(100);
+                                    try {
+                                        Thread.sleep(js.getValue());
+                                    }
+                                    catch(Exception e) {
+                                        e.printStackTrace();
+                                    }
                                     break;
                                 }
 
@@ -42,12 +54,22 @@ public class KniGuiV2 extends JPanel{
                             if(!flag)
                                 break;
                         }
+//                        linker.cancel(true);
                     }
-                    return null;}
+                    return null;
+                }
             };
             linker.execute();
-        } catch (Exception e) {
-            e.printStackTrace();
+
+    }
+    public void actionPerformed(ActionEvent e){
+        linker.cancel(true);
+        System.out.println("hello");
+        if(e.getSource()==res)
+        {
+            pos = new ArrayList<>();
+            linker.execute();
+            System.out.println("hello");
         }
     }
     @Override
@@ -84,9 +106,30 @@ public class KniGuiV2 extends JPanel{
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
             JFrame J = new JFrame("Knight's Tour");
+            J.getContentPane().setLayout(new BoxLayout(J.getContentPane(),BoxLayout.Y_AXIS));
+//                J.getContentPane().setBorder(new EmptyBorder(new Insets(20,20,20,20)));
             J.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             J.setSize(600, 600);
-            J.setContentPane(new KniGuiV2());
+            JPanel np = new JPanel();
+            np.setLayout(new BoxLayout(np,BoxLayout.X_AXIS));
+            JLabel spd = new JLabel("Speed :");
+            spd.setForeground(Color.white);
+            spd.setFont(new Font("Comic Sans MS",Font.BOLD,15));
+            JSlider js = new JSlider(0,300,100);
+            js.setBackground(Color.black);
+            np.setBackground(Color.black);
+            np.add(spd);
+            np.add(js);
+            np.setBorder(new EmptyBorder(new Insets(10,10,10,10)));
+            JButton b = new JButton("Reset");
+            try {
+                J.add(new KniGuiV2(js,b));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            np.add(b);
+            J.add(np);
+
             J.setVisible(true);
         });
 
