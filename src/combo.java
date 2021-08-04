@@ -1,4 +1,5 @@
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -6,14 +7,16 @@ import java.util.List;
 public class combo extends JPanel{
     int[][] a;
     int n=8;
-    int speed = 1;
+    JSlider js;
+    int speed = 100;
     List<Integer> tpos;
     SwingWorker<Void,Void> Linker;
     List<List<Integer>> pos = new ArrayList<List<Integer>>();
     int[] xMove = { 2, 1, -1, -2, -2, -1, 1, 2 };
     int[] yMove = { 1, 2, 2, 1, -1, -2, -2, -1 };
 //    int cnt=0;
-    combo(int i,int j){
+    combo(int i,int j,JSlider js){
+        this.js = js;
         a = new int[8][8];
         a[i][j]=1;
         tpos =new ArrayList<Integer>();
@@ -72,7 +75,6 @@ public class combo extends JPanel{
                 icol = pos.get(i).get(0) + 1;
                 } catch (Exception E) {
 
-
                 }
             }
         }
@@ -101,7 +103,7 @@ public class combo extends JPanel{
                 tpos.add(next_x);
                 pos.add(tpos);
                 try {
-                    Thread.sleep(speed);
+                    Thread.sleep(js.getValue());
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -113,7 +115,7 @@ public class combo extends JPanel{
                     a[next_x][next_y] = 0;
                     pos.remove(cnt-1);
                     try {
-                        Thread.sleep(speed);
+                        Thread.sleep(js.getValue());
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
@@ -129,10 +131,24 @@ public class combo extends JPanel{
             @Override
             public void run() {
                 JFrame J = new JFrame("Knight's Tour");
+                J.getContentPane().setLayout(new BoxLayout(J.getContentPane(),BoxLayout.Y_AXIS));
+//                J.getContentPane().setBorder(new EmptyBorder(new Insets(20,20,20,20)));
+
                 J.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                 J.setSize(600, 600);
-
-                J.setContentPane(new combo(0,0));
+                JPanel np = new JPanel();
+                np.setLayout(new BoxLayout(np,BoxLayout.X_AXIS));
+                JLabel spd = new JLabel("Speed :");
+                spd.setForeground(Color.white);
+                spd.setFont(new Font("Comic Sans MS",Font.BOLD,15));
+                JSlider js = new JSlider(0,200,30);
+                js.setBackground(Color.black);
+                np.setBackground(Color.black);
+                np.add(spd);
+                np.add(js);
+                np.setBorder(new EmptyBorder(new Insets(10,10,10,10)));
+                J.add(new combo(0,0,js));
+                J.add(np);
                 J.setVisible(true);
             }
         });

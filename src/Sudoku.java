@@ -7,10 +7,9 @@ import java.awt.event.ActionListener;
 public class Sudoku extends JPanel implements ActionListener {
     JTextField[][] a = new JTextField[9][9];
     JLabel spd = new JLabel("Speed :");
-    int speed = 50;
-    int tspeed =50;
+    int speed;
     JTextField sp = new JTextField("    ");
-
+    JSlider js;
     JPanel p = new JPanel();
     JPanel p1 = new JPanel();
     boolean flag = false;
@@ -91,16 +90,17 @@ public class Sudoku extends JPanel implements ActionListener {
         func1();
 
         JPanel p2 = new JPanel();
-
+        p2.setLayout(new BoxLayout(p2,BoxLayout.X_AXIS));
+        js = new JSlider(0,100,20);
+        js.setBackground(Color.black);
         p2.setBackground(Color.black);
-        sp.setFont(new Font("Comic Sans MS",Font.BOLD,15));
-        sp.setSize(20,10);
+
         spd.setFont(new Font("Comic Sans MS",Font.BOLD,15));
         spd.setForeground(Color.white);
         p2.add(spd);
-        p2.add(sp);
+        p2.add(js);
+        p2.setBorder(new EmptyBorder(new Insets(0,5,10,5)));
         add(p2);
-
         add(p1);
     }
 
@@ -135,12 +135,7 @@ public class Sudoku extends JPanel implements ActionListener {
     }
 
     void func2(int row,int col){
-        try{
-            speed = Integer.parseInt(sp.getText().trim());
-        }
-        catch(Exception q){
-            speed=tspeed;
-        }
+        speed = js.getValue();
         for(int i=0;i<9;i++)
             for(int j=0;j<9;j++)
             {
